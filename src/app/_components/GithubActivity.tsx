@@ -12,7 +12,7 @@ interface Activity {
 
 export default function GithubActivity({ username, year }: Activity) {
   return (
-    <>
+    <div>
       <GitHubCalendar
         username={username}
         hideColorLegend={true}
@@ -32,6 +32,6 @@ export default function GithubActivity({ username, year }: Activity) {
         }
       />
       <ReactTooltip id="react-tooltip" />
-    </>
+    </div>
   );
 }

@@ -1,10 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import React, { useEffect } from "react";
 
 export default function GithubInfo({ username }: { username: string }) {
+  type GithubInfoType = {
+    avatar_url: string;
+    html_url: string;
+    location: string;
+    name: string;
+  };
+
   const githubApiUrl = `https://api.github.com/users/${username}`;
-  const [githubInfo, setGithubInfo] = React.useState({});
+  const [githubInfo, setGithubInfo] = React.useState({} as GithubInfoType);
 
   useEffect(() => {
     fetch(githubApiUrl)
@@ -18,44 +26,44 @@ export default function GithubInfo({ username }: { username: string }) {
   }, [githubApiUrl]);
 
   return (
-    <>
-      <div className="overflow-hidden rounded-lg bg-white shadow">
-        <h2 className="sr-only" id="profile-overview-title">
-          Profile Overview
-        </h2>
-        <div className="bg-white p-6">
-          <div className="sm:flex sm:items-center sm:justify-between">
-            <div className="sm:flex sm:space-x-5">
-              <div className="flex-shrink-0">
-                <img
-                  className="mx-auto h-20 w-20 rounded-full"
-                  src={githubInfo?.avatar_url}
-                  alt="github avatar"
-                />
-              </div>
-              <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                <p className="text-xl font-bold text-gray-900 sm:text-2xl">
-                  {githubInfo?.name}
-                </p>
-                <p className="text-sm font-medium text-gray-600">
-                  {githubInfo?.bio}
-                </p>
-                <p className="text-sm font-medium text-gray-600">
-                  {githubInfo?.location}
-                </p>
-              </div>
-            </div>
-            <div className="mt-5 flex justify-center sm:mt-0">
-              <a
-                href={githubInfo?.html_url}
-                className="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              >
-                View profile
-              </a>
-            </div>
+    <div className="md:flex md:items-center md:justify-between md:space-x-5 pb-5">
+      <div className="flex items-start space-x-5">
+        <div className="flex-shrink-0">
+          <div className="relative">
+            <img
+              className="h-16 w-16 rounded-full"
+              src={githubInfo?.avatar_url}
+              alt={githubInfo?.name}
+            />
+            <span
+              className="absolute inset-0 rounded-full shadow-inner"
+              aria-hidden="true"
+            />
           </div>
         </div>
+        {/*
+          Use vertical padding to simulate center alignment when both lines of text are one line,
+          but preserve the same layout if the text wraps without making the image jump around.
+        */}
+        <div className="pt-1.5">
+          <h1 className="text-2xl font-bold text-gray-900">
+            {githubInfo?.name}
+          </h1>
+          <p className="text-sm font-medium text-gray-500">
+            {githubInfo?.location}
+          </p>
+        </div>
       </div>
-    </>
+      <div className="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-3 sm:space-y-0 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
+        <button
+          type="button"
+          className="inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        >
+          <Link href={githubInfo?.html_url || "https://github.com"}>
+            View Profile
+          </Link>
+        </button>
+      </div>
+    </div>
   );
 }
